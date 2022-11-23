@@ -3,52 +3,58 @@ import React, { useState } from "react";
 
 //create your first component
 const Home = () => {
-	const [tarea, setTarea] = useState([
+	const [tasks, setTasks] = useState([
 		"Levantarme",
 		"Ir al baño"
-	]);
-	const [nuevaTarea, setNuevaTarea] = useState("")
-
-	function agregarTarea(e) {
-		if (e.code == "Enter" && nuevaTarea != "") {
-			setTarea([...tarea, nuevaTarea])
-			nuevaTarea("")
-		}
-
-		function removeTarea(index) {
-
+	])
+	const [newTask, setNewTask] = useState("")
+	function addTask(e) {
+		if (e.code == "Enter" && newTask != "") {
+			setTasks([...tasks, newTask])
+			setNewTask("")
 		}
 	}
+	const [deleteTask, setDeleteTask] = useState("")
+
+	function removeTask(index) {
+		console.log(index)
+
+		var newTasks = [...tasks]
+		newTasks.splice(index, 1)
+		setTasks(newTasks)
+	}
+
 	return (
-		<div classNameName="container-fluid d-flex mt-5 justify-content-center">
-			<h1>TODO LIST</h1>
+		<div className="container">
+			<h1>TO DO LIST</h1>
+			<div className="container-fluid d-flex mt-5 justify-content-center">
 
-			<div className="input-group flex-nowrap">
-				<input type="text" className="form-control" placeholder="What we have to do?" aria-label="Username" aria-describedby="addon-wrapping" />
+				<ul className="list-group w-90">
+					<li className="list-group-item d-flex justify-content-between align-items-center">
+						<input
+							className="form-control"
+							type="text"
+							onKeyDown={e => addTask(e)}
+							onChange={e => setNewTask(e.target.value)}
+							value={newTask}
+							name="task" id="task" placeholder="What we have to do?" />
+					</li>
+					{tasks.map((task, index) => (
+						<li key={index}
+							className="list-group-item d-flex justify-content-between  align-items-center">
+							{task}
+							<button onClick={() => removeTask(index)} className="badge bg-danger rounded-pill">X</button>
+						</li>
+					))}
+					<li className="list-group-item text-center disabled text-muted d-flex justify-content-center align-items-center">
+						<small>
+							{tasks.length} items.
+						</small>
+					</li>
+				</ul>
+
 			</div>
-			<ul className="list-group w-50">
-				<li className="list-group-item d-flex justify-content-between align-items-center">
-					<input 
-					className="form-control" 
-					type="text" 
-					onKeyDown={e => agregarTarea(e)} 
-					onchange={e => setNuevaTarea(e.target.value)} 
-					value={nuevaTarea} 
-					name="agregarTarea">{tarea.map}</input>
-				</li>
-				{nuevaTarea.map((tarea, index) =>(
-				<li key={index} className="list-group-item d-flex justify-content-between align-items-center">{tarea}
-					A second list item
-					<button className="badge bg-primary rounded-pill">2</button>
-				</li>
-				))}
-				<li className="list-group-item d-flex justify-content-between align-items-center">
-					A third list item
-					<small className="badge bg-primary rounded-pill">{tarea.lenght} items.</small>
-				</li>
-			</ul>
 		</div>
-
 	);
 };
 
